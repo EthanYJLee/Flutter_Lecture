@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:listview_todo_app/model/message.dart';
 import 'package:listview_todo_app/model/todo_list.dart';
 import 'package:listview_todo_app/view/detail_list.dart';
+import 'package:listview_todo_app/view/insert_list.dart';
 
 class TableList extends StatefulWidget {
   const TableList({super.key});
@@ -21,17 +22,20 @@ class _TableListState extends State<TableList> {
     super.initState();
     todoList = [];
     todoList.add(TodoList(
-        imagePath: 'images/cart.png',
-        workList: '책구매',
-        dateTime: DateTime(2022, 5, 8)));
+      imagePath: 'images/cart.png',
+      workList: '책구매',
+      dateTime: DateTime(2022, 1, 1),
+    ));
     todoList.add(TodoList(
-        imagePath: 'images/clock.png',
-        workList: '철수와 약속',
-        dateTime: DateTime(2022, 7, 9)));
+      imagePath: 'images/clock.png',
+      workList: '철수와 약속',
+      dateTime: DateTime(2022, 1, 1),
+    ));
     todoList.add(TodoList(
-        imagePath: 'images/pencil.png',
-        workList: '스터디 준비',
-        dateTime: DateTime(2022, 12, 12)));
+      imagePath: 'images/pencil.png',
+      workList: '스터디 준비',
+      dateTime: DateTime(2022, 1, 1),
+    ));
   }
 
   @override
@@ -41,7 +45,11 @@ class _TableListState extends State<TableList> {
         title: const Text('Main View'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // insert view로 넘어가서 입력을 마치고 다시 돌아올 때 main view에 적용해주는 프로세스가 필요하다
+              Navigator.pushNamed(context, '/insert')
+                  .then((value) => rebuildData());
+            },
             icon: const Icon(
               Icons.add_outlined,
             ),
@@ -56,6 +64,7 @@ class _TableListState extends State<TableList> {
               onTap: () {
                 Message.workList = todoList[position].workList;
                 Message.imagePath = todoList[position].imagePath;
+                Message.dateTime = todoList[position].dateTime;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -75,7 +84,8 @@ class _TableListState extends State<TableList> {
                     Text(todoList[position].workList),
                     Text(
                       DateFormat('yyyy-MM-dd')
-                          .format(todoList[position].dateTime),
+                          .format(todoList[position].dateTime)
+                          .toString(),
                     ),
                   ],
                 ),
@@ -86,4 +96,17 @@ class _TableListState extends State<TableList> {
       ),
     );
   }
-}
+
+  // Functions
+  rebuildData() {
+    setState(() {
+      if (Message.action == true) {
+        todoList.add(TodoList(
+            imagePath: Message.imagePath,
+            workList: Message.workList,
+            dateTime: Message.dateTime));
+        Message.action = false;
+      }
+    });
+  }
+} // End

@@ -23,10 +23,22 @@ class _DetailListState extends State<DetailList> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(Message.imagePath),
-            Text(Message.workList),
+            Column(
+              children: [
+                Image.asset(Message.imagePath),
+                SizedBox(
+                  height: 39,
+                ),
+                Text(
+                  Message.workList,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(
-              height: 200,
+              height: 65,
             ),
             CalendarDatePicker(
               initialDate: DateTime(2022, 3, 1),
@@ -34,16 +46,23 @@ class _DetailListState extends State<DetailList> {
               lastDate: DateTime(2022, 12, 31),
               onDateChanged: (value) => DateTime.now,
             ),
-            ElevatedButton(
-              onPressed: (() => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => const TableList()),
-                    ),
-                  )),
-              child: const Text(
-                '목록으로',
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '목록으로',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('삭제'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                )
+              ],
             ),
           ],
         ),
