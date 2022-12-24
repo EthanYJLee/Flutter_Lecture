@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
           page: (() => UpdateStudent()),
         ),
       ],
+      initialRoute: '/read',
     );
   }
 }

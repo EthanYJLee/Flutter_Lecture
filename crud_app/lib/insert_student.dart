@@ -29,6 +29,7 @@ class _InsertStudentState extends State<InsertStudent> {
     nameController = TextEditingController();
     deptController = TextEditingController();
     phoneController = TextEditingController();
+    codeController.text = 'S';
   }
 
   @override
@@ -43,7 +44,7 @@ class _InsertStudentState extends State<InsertStudent> {
               TextField(
                 controller: codeController,
                 decoration:
-                    const InputDecoration(labelText: '학번을 입력하세요 (최대 4문자/숫자)'),
+                    const InputDecoration(labelText: '학번을 입력하세요 (3자리 숫자)'),
                 keyboardType: TextInputType.text,
               ),
               TextField(
