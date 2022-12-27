@@ -38,8 +38,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.5
-  shared_preferences: ^2.0.15
   http: ^0.13.5
+  # Shared Preferences
+  shared_preferences: ^2.0.15
+  intl: ^0.18.0
   # 카카오
   json_serializable: ^6.5.4
   dio: ^4.0.6

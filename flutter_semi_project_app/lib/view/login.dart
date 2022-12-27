@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -24,6 +27,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   // 로그인 컨트롤러
   late TextEditingController userIdController;
   late TextEditingController passwordController;
+  late String uId = '';
+  late String uPassword = '';
   // 카카오 로그인, 로그아웃 관리
   final viewModel = MainViewModel(KakaoLogin());
   // 텍스트필드 외의 화면을 눌렀을 때 텍스트필드의 Focus를 해제하기 위해 FocusNode 선언
@@ -111,10 +116,12 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
               children: [
                 // 대충 로고 이미지
                 SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.asset(
-                    'images/scrapbook.png',
+                  height: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(50.0),
+                    child: Image.asset(
+                      'images/scrapbook.png',
+                    ),
                   ),
                 ),
                 // ID 입력
@@ -158,58 +165,65 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                         //     builder: ((context) => Home()),
                         //   ),
                         // );
+
+                        // 아이디 입력창 or 비밀번호 입력창 Empty 여부 체크
                         if (userIdController.text.trim().isEmpty ||
                             passwordController.text.trim().isEmpty) {
                           errorSnackBar(context);
                         } else {
-                          // check ID, PW
+                          // 아이디, 비번 모두 입력했다면 DB에 저장된 회원정보 체크
                           //**********************************************
                           // 이 단계에서 DB 등록된 회원정보 비교해줘야함 (수정할것!!!!!!!)
                           //**********************************************/
-                          if (userIdController.text.trim() == 'root' &&
-                              passwordController.text.trim() == 'qwer1234') {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: ((context) {
-                                return AlertDialog(
-                                  title: const Text('로그인 성공'),
-                                  content:
-                                      Text('${userIdController.text}님 환영합니다'),
-                                  actions: [
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 138, 143, 239),
-                                      ),
-                                      onPressed: (() {
-                                        // OK버튼 누르면 ID와 PW 정보 담아서 전달
-                                        Navigator.of(context).pop();
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: ((context) {
-                                              return Home(
-                                                userId: userIdController.text,
-                                                password:
-                                                    passwordController.text,
-                                              );
-                                            }),
-                                          ),
-                                        );
-                                      }),
-                                      child: const Text(
-                                        'OK',
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }),
-                            );
-                            // ID와 PW: dialog로 전달 => 다음 view로 전달
-                          } else {
-                            checkSnackBar(context);
-                          }
+                          // Select 쿼리
+                          uId = userIdController.text;
+                          uPassword = passwordController.text;
+                          loginChk();
+
+                          // if (userIdController.text.trim() == 'root' &&
+                          //     passwordController.text.trim() == 'qwer1234') {
+                          //   showDialog(
+                          //     barrierDismissible: false,
+                          //     context: context,
+                          //     builder: ((context) {
+                          //       return AlertDialog(
+                          //         title: const Text('로그인 성공'),
+                          //         content:
+                          //             Text('${userIdController.text}님 환영합니다'),
+                          //         actions: [
+                          //           ElevatedButton(
+                          //             style: ElevatedButton.styleFrom(
+                          //               backgroundColor: const Color.fromARGB(
+                          //                   255, 138, 143, 239),
+                          //             ),
+                          //             onPressed: (() {
+                          //               // OK버튼 누르면 ID와 PW 정보 담아서 전달
+                          //               Navigator.of(context).pop();
+                          //               Navigator.push(
+                          //                 context,
+                          //                 MaterialPageRoute(
+                          //                   builder: ((context) {
+                          //                     return Home(
+                          //                       userId: userIdController.text,
+                          //                       password:
+                          //                           passwordController.text,
+                          //                     );
+                          //                   }),
+                          //                 ),
+                          //               );
+                          //             }),
+                          //             child: const Text(
+                          //               'OK',
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       );
+                          //     }),
+                          //   );
+                          //   // ID와 PW: dialog로 전달 => 다음 view로 전달
+                          // } else {
+                          //   checkSnackBar(context);
+                          // }
                         }
                       },
                       child: const Text(
@@ -228,7 +242,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((context) => SignUp()),
+                            builder: ((context) => const SignUp()),
                           ),
                         );
                       },
@@ -243,70 +257,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                 ),
                 InkWell(
                   onTap: (() async {
-                    await viewModel.login();
-                    setState(() {
-                      showDialog(
-                        context: context,
-                        builder: ((context) {
-                          return AlertDialog(
-                            title: const Text('카카오 로그인'),
-                            content: SizedBox(
-                              height: 350,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.network(
-                                    viewModel.user?.kakaoAccount?.profile
-                                            ?.profileImageUrl ??
-                                        '',
-                                    errorBuilder: (BuildContext context,
-                                        Object error, stackTrace) {
-                                      return const Text(
-                                        'Error: 프로필 불러오기 실패',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    '${viewModel.user?.kakaoAccount?.profile?.nickname}님 환영합니다',
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: (() {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: ((context) {
-                                    return const KakaoHome();
-                                  })));
-                                }),
-                                child: const Text(
-                                  '확인',
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: (() {
-                                  Navigator.pop(context);
-                                }),
-                                child: const Text(
-                                  '취소',
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                      );
-                    });
+                    _kakaoShowDialog(context);
                   }),
                   child: Image.asset(
                     'images/kakao_login_medium_wide.png',
@@ -355,6 +306,99 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
     ));
   }
 
+  // Desc: 카카오 로그인 시도시 성공/실패에 따라 Dialog 출력
+  // 2022.12.26
+  _kakaoShowDialog(BuildContext context) async {
+    await viewModel.login();
+    setState(() {
+      showDialog(
+        context: context,
+        builder: ((context) {
+          // Desc: 카카오 로그인 정보 불러오기에 성공하면 Dialog 띄우고,
+          // 실패하면 Error Dialog 띄운 후 pop
+          // 2022.12.26
+          if (viewModel.user?.kakaoAccount?.profile?.nickname == null) {
+            return AlertDialog(
+              title: const Text('카카오 로그인 실패'),
+              content: const Text('로그인 정보 불러오기에 실패했습니다'),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 138, 143, 239),
+                  ),
+                  onPressed: (() {
+                    Navigator.pop(context);
+                  }),
+                  child: const Text('뒤로가기'),
+                )
+              ],
+            );
+          } else {
+            return AlertDialog(
+              title: const Text('카카오 로그인'),
+              content: SizedBox(
+                height: 350,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.network(
+                      viewModel.user?.kakaoAccount?.profile?.profileImageUrl ??
+                          '',
+                      errorBuilder:
+                          (BuildContext context, Object error, stackTrace) {
+                        return const Text(
+                          'Error: 프로필 불러오기 실패',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      '${viewModel.user?.kakaoAccount?.profile?.nickname}님 환영합니다',
+                      style: const TextStyle(
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: (() {
+                    // Desc: 여기서 pop을 시켜야 로그아웃시 일반회원, 카카오회원 동일하게
+                    // pop 두 번으로 로그인 화면으로 돌아오게 됨
+                    // 2022.12.25
+                    Navigator.popAndPushNamed(
+                      context,
+                      '/kakao_home',
+                    );
+                  }),
+                  child: const Text(
+                    '확인',
+                  ),
+                ),
+                // ***** 카카오 로그인 성공 시 취소버튼 추가할지 정할것
+                // ***** 취소버튼 추가하면 버튼 클릭시 로그아웃 되도록 설정해야 함
+                // ElevatedButton(
+                //   onPressed: (() {
+                //     Navigator.pop(context);
+                //   }),
+                //   child: const Text(
+                //     '취소',
+                //   ),
+                // ),
+              ],
+            );
+          }
+        }),
+      );
+    });
+  }
   // ********************* DB 생성 후 수정할 것 *********************
   //** userIdController.text.trim().isNotEmpty &&
   //passwordController.text.trim().isNotEmpty일 경우 실행
@@ -393,6 +437,23 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
         });
   }
 
+  // Desc: 일반 회원 로그인 시도 시 입력한 ID와 PW가 DB에 있는지 SELECT
+  // 2022.12.26
+  Future<int> loginChk() async {
+    var data = [];
+    var url = Uri.parse(
+        'http://localhost:8080/Flutter_Semi/user_login_check_flutter.jsp?uId=$uId&uPassword=$uPassword');
+    var response = await http.get(url);
+    var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+    List result = dataConvertedJSON['results'];
+    setState(() {
+      data.addAll(result);
+      print(result);
+    });
+
+    return 1;
+  }
+
   // Desc: 로그인 성공시 SharedPreferences에 저장
   // 2022.12.25
   _saveSharedPreferences() async {
@@ -412,4 +473,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   Future<bool> _willPopScope() async {
     return false;
   }
+
+  // Desc: MySQL DB에서 로그인 정보 (ID, Password, 닉네임) 가져오기
+  // 2022.12.26
+
 }

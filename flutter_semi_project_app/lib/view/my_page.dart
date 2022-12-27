@@ -81,6 +81,10 @@ class _MyPageState extends State<MyPage> {
                             onPressed: () {
                               _logout(context);
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 138, 143, 239),
+                            ),
                             child: const Text(
                               '예',
                             ),
@@ -89,6 +93,10 @@ class _MyPageState extends State<MyPage> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 138, 143, 239),
+                            ),
                             child: const Text(
                               '아니오',
                             ),
@@ -97,6 +105,9 @@ class _MyPageState extends State<MyPage> {
                       );
                     }));
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 138, 143, 239),
+              ),
               child: const Text(
                 'Log Out',
               ),
@@ -122,13 +133,13 @@ class _MyPageState extends State<MyPage> {
     // 세 번 하면 일반 유저가 로그인 했을 경우 로그인 화면까지 날아감
     // pushnamed 쓸지 pop 쓸지 정할것
     // */
+
+    // 2022.12.25
+    // kakao login시 popAndPushNamed로 page 하나를 줄여서 일반 로그인과 동일하게 설정한 후
+    // pop 두번 되면 로그인 화면으로 돌아가도록 통일함
     setState(() {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => Login()),
-          ),
-          (route) => false);
+      Navigator.pop(context);
+      Navigator.pop(context);
     });
   }
 }
