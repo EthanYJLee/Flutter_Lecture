@@ -52,6 +52,12 @@ dependencies:
   # SQLite
   sqflite: ^2.2.1
   path: ^1.8.2
+  # Image Picker
+  image_picker: ^0.8.6
+  video_player: ^2.4.10
+  # Path Provider
+  path_provider: ^2.0.11
+  
 
 dev_dependencies:
   flutter_test:

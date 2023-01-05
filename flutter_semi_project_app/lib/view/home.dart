@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_semi_project_app/dao/database_handler.dart';
 import 'package:flutter_semi_project_app/view/calendar.dart';
 import 'package:flutter_semi_project_app/view/my_page.dart';
 import 'package:flutter_semi_project_app/view/view_all_photos.dart';
@@ -17,11 +18,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController controller;
+  late DatabaseHandler handler;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = TabController(length: 3, vsync: this);
+    handler = DatabaseHandler();
+    handler.initializeDB().whenComplete(() async {
+      setState(() {});
+    });
   }
 
   @override
@@ -37,7 +43,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       bottomNavigationBar: Container(
         height: 80,
-        color: Color.fromARGB(255, 138, 143, 239),
+        color: const Color.fromARGB(255, 138, 143, 239),
         child: TabBar(
             controller: controller,
             labelColor: Colors.white,

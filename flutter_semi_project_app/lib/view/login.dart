@@ -27,8 +27,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   // 로그인 컨트롤러
   late TextEditingController userIdController;
   late TextEditingController passwordController;
-  late String uId = '';
-  late String uPassword = '';
+  late String uId;
+  late String uPassword;
   // 카카오 로그인, 로그아웃 관리
   final viewModel = MainViewModel(KakaoLogin());
   // 텍스트필드 외의 화면을 눌렀을 때 텍스트필드의 Focus를 해제하기 위해 FocusNode 선언
@@ -45,6 +45,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
 
     userIdController = TextEditingController();
     passwordController = TextEditingController();
+    uId = '';
+    uPassword = '';
   }
 
   @override
@@ -105,6 +107,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
           pwFocus.unfocus();
         }),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text('Log In'),
             backgroundColor: const Color.fromARGB(255, 138, 143, 239),
@@ -114,9 +117,13 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text(
+                  'Scrap Book App',
+                  style: TextStyle(fontSize: 20),
+                ),
                 // 대충 로고 이미지
                 SizedBox(
-                  height: 300,
+                  height: 250,
                   child: Padding(
                     padding: const EdgeInsets.all(50.0),
                     child: Image.asset(
@@ -125,144 +132,148 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                   ),
                 ),
                 // ID 입력
-                Padding(
-                  padding: const EdgeInsets.only(left: 50.0, right: 50.0),
-                  child: TextField(
-                    controller: userIdController,
-                    focusNode: idFocus,
-                    decoration: const InputDecoration(
-                      labelText: 'ID를 입력하세요',
-                    ),
-                  ),
-                ),
-                // Password 입력
-                Padding(
-                  padding: const EdgeInsets.only(left: 50.0, right: 50.0),
-                  child: TextField(
-                    controller: passwordController,
-                    focusNode: pwFocus,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호를 입력하세요',
-                    ),
-                    obscureText: true,
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
                   children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 138, 143, 239),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                      child: TextField(
+                        controller: userIdController,
+                        focusNode: idFocus,
+                        decoration: const InputDecoration(
+                          labelText: 'ID를 입력하세요',
+                        ),
                       ),
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: ((context) => Home()),
-                        //   ),
-                        // );
-
-                        // 아이디 입력창 or 비밀번호 입력창 Empty 여부 체크
-                        if (userIdController.text.trim().isEmpty ||
-                            passwordController.text.trim().isEmpty) {
-                          errorSnackBar(context);
-                        } else {
-                          // 아이디, 비번 모두 입력했다면 DB에 저장된 회원정보 체크
-                          //**********************************************
-                          // 이 단계에서 DB 등록된 회원정보 비교해줘야함 (수정할것!!!!!!!)
-                          //**********************************************/
-                          // Select 쿼리
-                          uId = userIdController.text;
-                          uPassword = passwordController.text;
-                          loginChk();
-
-                          // if (userIdController.text.trim() == 'root' &&
-                          //     passwordController.text.trim() == 'qwer1234') {
-                          //   showDialog(
-                          //     barrierDismissible: false,
-                          //     context: context,
-                          //     builder: ((context) {
-                          //       return AlertDialog(
-                          //         title: const Text('로그인 성공'),
-                          //         content:
-                          //             Text('${userIdController.text}님 환영합니다'),
-                          //         actions: [
-                          //           ElevatedButton(
-                          //             style: ElevatedButton.styleFrom(
-                          //               backgroundColor: const Color.fromARGB(
-                          //                   255, 138, 143, 239),
-                          //             ),
-                          //             onPressed: (() {
-                          //               // OK버튼 누르면 ID와 PW 정보 담아서 전달
-                          //               Navigator.of(context).pop();
-                          //               Navigator.push(
-                          //                 context,
-                          //                 MaterialPageRoute(
-                          //                   builder: ((context) {
-                          //                     return Home(
-                          //                       userId: userIdController.text,
-                          //                       password:
-                          //                           passwordController.text,
-                          //                     );
-                          //                   }),
-                          //                 ),
-                          //               );
-                          //             }),
-                          //             child: const Text(
-                          //               'OK',
-                          //             ),
-                          //           ),
-                          //         ],
-                          //       );
-                          //     }),
-                          //   );
-                          //   // ID와 PW: dialog로 전달 => 다음 view로 전달
-                          // } else {
-                          //   checkSnackBar(context);
-                          // }
-                        }
-                      },
-                      child: const Text(
-                        '로그인',
+                    ),
+                    // Password 입력
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                      child: TextField(
+                        controller: passwordController,
+                        focusNode: pwFocus,
+                        decoration: const InputDecoration(
+                          labelText: '비밀번호를 입력하세요',
+                        ),
+                        obscureText: true,
                       ),
                     ),
                     const SizedBox(
-                      width: 50,
+                      height: 30,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 138, 143, 239),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const SignUp()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 138, 143, 239),
                           ),
-                        );
-                      },
-                      child: const Text(
-                        '회원가입',
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: ((context) => Home()),
+                            //   ),
+                            // );
+
+                            // 아이디 입력창 or 비밀번호 입력창 Empty 여부 체크
+                            if (userIdController.text.trim().isEmpty ||
+                                passwordController.text.trim().isEmpty) {
+                              errorSnackBar(context);
+                            } else {
+                              // 아이디, 비번 모두 입력했다면 DB에 저장된 회원정보 체크
+                              //**********************************************
+                              // 이 단계에서 DB 등록된 회원정보 비교해줘야함 (수정할것!!!!!!!)
+                              //**********************************************/
+                              // Select 쿼리
+                              uId = userIdController.text;
+                              uPassword = passwordController.text;
+                              loginChk();
+
+                              // if (userIdController.text.trim() == 'root' &&
+                              //     passwordController.text.trim() == 'qwer1234') {
+                              //   showDialog(
+                              //     barrierDismissible: false,
+                              //     context: context,
+                              //     builder: ((context) {
+                              //       return AlertDialog(
+                              //         title: const Text('로그인 성공'),
+                              //         content:
+                              //             Text('${userIdController.text}님 환영합니다'),
+                              //         actions: [
+                              //           ElevatedButton(
+                              //             style: ElevatedButton.styleFrom(
+                              //               backgroundColor: const Color.fromARGB(
+                              //                   255, 138, 143, 239),
+                              //             ),
+                              //             onPressed: (() {
+                              //               // OK버튼 누르면 ID와 PW 정보 담아서 전달
+                              //               Navigator.of(context).pop();
+                              //               Navigator.push(
+                              //                 context,
+                              //                 MaterialPageRoute(
+                              //                   builder: ((context) {
+                              //                     return Home(
+                              //                       userId: userIdController.text,
+                              //                       password:
+                              //                           passwordController.text,
+                              //                     );
+                              //                   }),
+                              //                 ),
+                              //               );
+                              //             }),
+                              //             child: const Text(
+                              //               'OK',
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       );
+                              //     }),
+                              //   );
+                              //   // ID와 PW: dialog로 전달 => 다음 view로 전달
+                              // } else {
+                              //   checkSnackBar(context);
+                              // }
+                            }
+                          },
+                          child: const Text(
+                            '로그인',
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 138, 143, 239),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((context) => const SignUp()),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            '회원가입',
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    InkWell(
+                      onTap: (() async {
+                        _kakaoShowDialog(context);
+                      }),
+                      child: Image.asset(
+                        'images/kakao_login_medium_wide.png',
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                InkWell(
-                  onTap: (() async {
-                    _kakaoShowDialog(context);
-                  }),
-                  child: Image.asset(
-                    'images/kakao_login_medium_wide.png',
-                  ),
-                )
               ],
             ),
           ),
@@ -335,15 +346,16 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
             );
           } else {
             return AlertDialog(
-              title: const Text('카카오 로그인'),
+              title: const Text('카카오 로그인 성공'),
               content: SizedBox(
-                height: 350,
+                height: 250,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.network(
                       viewModel.user?.kakaoAccount?.profile?.profileImageUrl ??
                           '',
+                      height: 100,
                       errorBuilder:
                           (BuildContext context, Object error, stackTrace) {
                         return const Text(
@@ -356,7 +368,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 50,
                     ),
                     Text(
                       '${viewModel.user?.kakaoAccount?.profile?.nickname}님 환영합니다',
@@ -404,54 +416,130 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   //passwordController.text.trim().isNotEmpty일 경우 실행
   // *//
 
-  _showDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('로그인 성공'),
-            content: Text('${userIdController.text}님 환영합니다'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // 로그인 성공시 SharedPreferences에 저장된다.
-                  _saveSharedPreferences();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) {
-                        return Home(
-                            userId: userIdController.text,
-                            password: passwordController.text);
-                      }),
-                    ),
-                  );
-                },
-                child: const Text(
-                  '확인',
-                ),
-              ),
-            ],
-          );
-        });
-  }
+  // _showDialog(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: const Text('로그인 성공'),
+  //           content: Text('${userIdController.text}님 환영합니다'),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //                 // 로그인 성공시 SharedPreferences에 저장된다.
+  //                 _saveSharedPreferences();
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: ((context) {
+  //                       return Home(
+  //                           userId: userIdController.text,
+  //                           password: passwordController.text);
+  //                     }),
+  //                   ),
+  //                 );
+  //               },
+  //               child: const Text(
+  //                 '확인',
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       });
+  // }
 
   // Desc: 일반 회원 로그인 시도 시 입력한 ID와 PW가 DB에 있는지 SELECT
   // 2022.12.26
   Future<int> loginChk() async {
-    var data = [];
+    int result = 0;
     var url = Uri.parse(
         'http://localhost:8080/Flutter_Semi/user_login_check_flutter.jsp?uId=$uId&uPassword=$uPassword');
     var response = await http.get(url);
     var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
-    List result = dataConvertedJSON['results'];
-    setState(() {
-      data.addAll(result);
-      print(result);
-    });
+    List data = dataConvertedJSON['results'];
+    for (int i = 0; i < data.length; i++) {
+      if (uId == data[i]['uId'] && uPassword == data[i]['uPassword']) {
+        result = 1;
+        String uNickname = data[i]['uNickname'];
+        _loginSuccess(uNickname);
+      }
+    }
+    if (result == 0) {
+      _loginFail();
+    }
+    return result;
+  }
 
-    return 1;
+  // Desc: 로그인 성공 시 dialog 출력
+  // 2022.12.27
+  _loginSuccess(String uNickname) async {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text('로그인 성공'),
+            content: Text('$uNickname님 환영합니다'),
+            actions: [
+              ElevatedButton(
+                onPressed: (() {
+                  Navigator.pop(context);
+                  _saveSharedPreferences();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) =>
+                          Home(userId: uId, password: uPassword)),
+                    ),
+                  );
+                }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 138, 143, 239),
+                ),
+                child: const Text(
+                  '확인',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: (() {
+                  Navigator.pop(context);
+                }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 138, 143, 239),
+                ),
+                child: const Text(
+                  '취소',
+                ),
+              ),
+            ],
+          );
+        }));
+  }
+
+  // Desc: 로그인 실패 시 dialog 출력
+  // 2022.12.27
+  _loginFail() async {
+    showDialog(
+        context: context,
+        builder: ((context) {
+          return AlertDialog(
+            title: const Text('로그인 실패'),
+            content: const Text('ID와 비밀번호를 확인해주세요'),
+            actions: [
+              ElevatedButton(
+                onPressed: (() {
+                  Navigator.pop(context);
+                }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 138, 143, 239),
+                ),
+                child: const Text(
+                  '확인',
+                ),
+              )
+            ],
+          );
+        }));
   }
 
   // Desc: 로그인 성공시 SharedPreferences에 저장

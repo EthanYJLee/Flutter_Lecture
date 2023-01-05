@@ -1,8 +1,8 @@
+import 'package:flutter_semi_project_app/model/photo_album.dart';
+import 'package:get/get_connect/sockets/src/socket_notifier.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-
-import '../model/user.dart';
 
 class DatabaseHandler {
   Future<Database> initializeDB() async {
@@ -11,49 +11,70 @@ class DatabaseHandler {
     return openDatabase(
       join(
         path,
-        'user.db',
+        'album.db',
       ),
       onCreate: (database, version) async {
         await database.execute(
-            'create table user (uSeq integer primary key autoincrement, uId text, uPassword text)');
+          '''CREATE TABLE album (pSeq integer primary key autoincrement, pTitle text, pContent text, pPlace text, pImage text, pDate TEXT as ISO8601 strings ("YYYY-MM-DD"), pGroup integer)''',
+        );
       },
       version: 1,
     );
   }
 
-  // 유저 회원가입
-  Future<int> userRegister(User user) async {
+  Future<int> insertPhotoalbum(PhotoAlbum photoAlbum) async {
     int result = 0;
     final Database db = await initializeDB();
     result = await db.rawInsert(
-      'insert into user(uId, uPassword) values(?,?)',
-      [user.uId, user.uPassword],
+      'insert into album (pTitle, pContent, pPlace, pImage, pDate, pGroup) values (?,?,?,?,?,?)',
+      [
+        photoAlbum.pTitle,
+        photoAlbum.pContent,
+        photoAlbum.pPlace,
+        photoAlbum.pImage,
+        photoAlbum.pDate,
+        photoAlbum.pGroup
+      ],
     );
+
     return result;
   }
 
-  // Future<List<User>> queryUser() async {
-  //   final Database db = await initializeDB();
-  //   final List<Map<String, Object?>> queryResult =
-  //       await db.rawQuery('select * from user');
-  //   return queryResult.map((e) => User.fromMap(e)).toList();
-  // }
+  // ViewSelectedPhoto에서 선택한 날짜의 앨범 보여주는 select
+  Future<List<PhotoAlbum>> querySelectedPhotoAlbum(String pDate) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery('select * from album where pDate = ? ', [pDate]);
+    return queryResult.map((e) => PhotoAlbum.fromMap(e)).toList();
+  }
 
-  // 테이블에서 로그인 시도한 ID와 Password 갯수 확인하고 1이면 로그인 성공
-  Future<int> checkUser(String uId, String uPassword) async {
-    final Database db = await openDatabase('user.db');
-    int count = 0;
-    count = (await db.query(
-        'select count(*) from user where uId = ? and uPassword = ?')) as int;
+  // ViewAllPhoto에서 모든 앨범 보여주는 select
+  Future<List<PhotoAlbum>> queryPhotoalbum() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery('select * from album');
+    return queryResult.map((e) => PhotoAlbum.fromMap(e)).toList();
+  }
+
+  Future<int> updateStudent(PhotoAlbum photoAlbum) async {
+    final Database db = await openDatabase('album.db');
+    int count = await db.rawUpdate(
+        'UPDATE album SET ptitle = ?, pContent = ?, pPlace = ?, pDate = ?, pImage = ?, pGroup = ? WHERE pSeq = ?',
+        [
+          photoAlbum.pTitle,
+          photoAlbum.pContent,
+          photoAlbum.pPlace,
+          photoAlbum.pDate,
+          photoAlbum.pImage,
+          photoAlbum.pGroup,
+          photoAlbum.pSeq,
+        ]);
     return count;
   }
 
-  // 컬럼 추가한 뒤에 수정할것
-  // Future<int> updateStudent(User user) async {
-  //   final Database db = await openDatabase('user.db');
-  //   int count = await db.rawUpdate(
-  //       'UPDATE user SET ~~~~~~~~~~~~~~~',
-  //       [user.~~~, user.~~~]);
-  //   return count;
-  // }
+  Future<void> closeDB() async {
+    final Database db = await openDatabase('album.db');
+
+    await db.close();
+  }
 }

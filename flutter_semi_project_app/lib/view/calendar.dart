@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_semi_project_app/view/add_photos.dart';
 import 'package:flutter_semi_project_app/view/view_selected_photos.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,15 @@ class _CalendarState extends State<Calendar> with WidgetsBindingObserver {
         backgroundColor: const Color.fromARGB(255, 138, 143, 239),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _saveSelectedDate();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((BuildContext context) => const AddPhotos()),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.add,
             ),
@@ -61,6 +70,7 @@ class _CalendarState extends State<Calendar> with WidgetsBindingObserver {
               ),
               onPressed: () {
                 _saveSelectedDate();
+                // print(selectedDate.toString());
                 Navigator.push(
                   context,
                   MaterialPageRoute(
