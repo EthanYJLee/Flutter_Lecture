@@ -24,9 +24,9 @@ end
 
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
-flutter_macos_podfile_setup
+flutter_macos__setup
 
-target 'Runner' do
+target 'MyApp' do
   use_frameworks!
   use_modular_headers!
 

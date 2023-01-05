@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_list_app2/firebase_options.dart';
-import 'package:firebase_list_app2/home.dart';
+import 'package:firebase_list_app/firebase_options.dart';
+import 'package:firebase_list_app/home.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -14,6 +14,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,7 +22,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      debugShowCheckedModeBanner: false,
       home: const Home(),
     );
   }

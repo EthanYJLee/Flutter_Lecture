@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "540477810078",
-    "project_id": "students-b020b",
-    "storage_bucket": "students-b020b.appspot.com"
+    "project_number": "384750602652",
+    "project_id": "fir-78ddd",
+    "storage_bucket": "fir-78ddd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:540477810078:android:033685acc4ddc61b61a28f",
+        "mobilesdk_app_id": "1:384750602652:android:d67b9d719e0b04e423e059",
         "android_client_info": {
-          "package_name": "com.example.firebase_list_app2"
+          "package_name": "com.example.firebase_list_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "540477810078-3h9dbj9cdg93clkchjs7kl1jgrh7jmvk.apps.googleusercontent.com",
+          "client_id": "384750602652-nj6saomtel93dvijntu39r7nn10q858l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAdkpCJ6-LcU4xtz6PEprtn1oxfyT-43qc"
+          "current_key": "AIzaSyCo1k9N9R_G35tA_0oh0cFGphCWoWPSxvY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "540477810078-3h9dbj9cdg93clkchjs7kl1jgrh7jmvk.apps.googleusercontent.com",
+              "client_id": "384750602652-nj6saomtel93dvijntu39r7nn10q858l.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "384750602652-45ssa81081hqtkulicau378gkc2b7uar.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.firebaseListApp"
+              }
             }
           ]
         }

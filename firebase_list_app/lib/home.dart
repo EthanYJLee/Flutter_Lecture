@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_list_app2/insert.dart';
-import 'package:firebase_list_app2/student.dart';
-import 'package:firebase_list_app2/update.dart';
+import 'package:firebase_list_app/insert.dart';
+import 'package:firebase_list_app/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -49,7 +48,9 @@ class _HomeState extends State<Home> {
           final documents = snapshot.data!.docs;
 
           return ListView(
-            children: documents.map((e) => _buildItemWidget(e)).toList(),
+            children: [
+              // documents.map((e) => _buildItemWidget(e)).toList(),
+            ],
           );
         }),
       ),
@@ -79,14 +80,6 @@ class _HomeState extends State<Home> {
         child: Container(
           color: Colors.amberAccent,
           child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const Update()),
-                ),
-              );
-            },
             child: Card(
               child: ListTile(
                 title: Text(

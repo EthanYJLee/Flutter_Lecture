@@ -26,28 +26,28 @@ class _InsertState extends State<Insert> {
           children: [
             TextField(
               controller: codeController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: '학번을 입력하세요',
               ),
               keyboardType: TextInputType.text,
             ),
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: '이름을 입력하세요',
               ),
               keyboardType: TextInputType.text,
             ),
             TextField(
               controller: deptController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: '전공을 입력하세요',
               ),
               keyboardType: TextInputType.text,
             ),
             TextField(
               controller: phoneController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: '전화번호를 입력하세요',
               ),
               keyboardType: TextInputType.text,
@@ -74,30 +74,28 @@ class _InsertState extends State<Insert> {
     FirebaseFirestore.instance
         .collection('students')
         .add({'code': code, 'name': name, 'dept': dept, 'phone': phone});
-    _showDialog(context);
-  }
-
-  _showDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: ((BuildContext context) {
-          return AlertDialog(
-            title: const Text('입력 결과'),
-            content: const Text(
-              '입력이 완료되었습니다.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: (() {
-                  Navigator.of(context).pop();
-                  Navigator.pop(context);
-                }),
-                child: const Text(
-                  'OK',
-                ),
+    _showDialog(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: ((BuildContext context) {
+            return AlertDialog(
+              title: const Text('입력 결과'),
+              content: const Text(
+                '입력이 완료되었습니다.',
               ),
-            ],
-          );
-        }));
+              actions: [
+                TextButton(
+                  onPressed: (() {
+                    Navigator.of(context).pop();
+                    Navigator.pop(context);
+                  }),
+                  child: const Text(
+                    'OK',
+                  ),
+                ),
+              ],
+            );
+          }));
+    }
   }
 }
