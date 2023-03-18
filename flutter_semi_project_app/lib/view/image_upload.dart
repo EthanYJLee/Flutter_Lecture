@@ -88,7 +88,7 @@ class _ImageUploadState extends State<ImageUpload> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    handler = DatabaseHandler();
+    // handler = DatabaseHandler();
     // DatabaseHandler 초기화
     // handler.initializeDB().whenComplete(() async {
     //   setState(() {});
@@ -174,7 +174,6 @@ class _ImageUploadState extends State<ImageUpload> {
                 //**
                 // NOTHING HAPPENS
                 // */
-
               } else {
                 // 선택한 사진이 있는 경우
                 _saveSharedPreferences();

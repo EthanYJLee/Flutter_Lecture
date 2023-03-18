@@ -59,7 +59,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
-
       //** detached */
       case AppLifecycleState.detached:
         // 응용 프로그램은 여전히 flutter 엔진에서 호스팅되지만 "호스트 View"에서 분리됩니다.
@@ -131,6 +130,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                     ),
                   ),
                 ),
+
                 // ID 입력
                 Column(
                   children: [
@@ -564,5 +564,4 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
 
   // Desc: MySQL DB에서 로그인 정보 (ID, Password, 닉네임) 가져오기
   // 2022.12.26
-
 }

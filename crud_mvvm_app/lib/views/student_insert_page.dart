@@ -18,6 +18,12 @@ class _StudentInsertState extends State<StudentInsert> {
   late String name;
   late String dept;
   late String phone;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    codeController.text = "S";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +32,7 @@ class _StudentInsertState extends State<StudentInsert> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Insert for CRUD"),
           backgroundColor: Colors.green,
@@ -105,7 +112,7 @@ class _StudentInsertState extends State<StudentInsert> {
         builder: (BuildContext context) {
           return AlertDialog(
               title: const Text("입력 선택"),
-              content: const Text("입력을 하시겠습니까 ?"),
+              content: const Text("입력을 하시겠습니까?"),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

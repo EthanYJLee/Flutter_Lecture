@@ -80,6 +80,7 @@ class StudentList extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
+                    // Student Info Modification
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return StudentUpdate(

@@ -7,6 +7,7 @@ class StudentUpdate extends StatefulWidget {
   final String rdept;
   final String rphone;
 
+  // 여기서 Info 받아서 initState로 전달 (View 출력)
   const StudentUpdate(
       {Key? key,
       required this.rcode,
